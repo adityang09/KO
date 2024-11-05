@@ -1,0 +1,48 @@
+import time, random
+
+# Initialize counters for swaps and iterations
+total_swaps = 0
+total_iterations = 0
+
+def det_part(arr, low, high):
+    global total_swaps, total_iterations
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        total_iterations += 1  # Increment for each comparison
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+            total_swaps += 1  # Count each swap
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    total_swaps += 1  # Count final swap for pivot placement
+    return i + 1
+
+def det_quicksort(arr, low, high):
+    if low < high:
+        pi = det_part(arr, low, high)
+        det_quicksort(arr, low, pi - 1)
+        det_quicksort(arr, pi + 1, high)
+
+def nondet_part(arr, low, high):
+    random_index = random.randint(low, high)
+    arr[random_index], arr[high] = arr[high], arr[random_index]  # Random pivot swap
+    global total_swaps
+    total_swaps += 1  # Count swap for random pivot selection
+    return det_part(arr, low, high)
+
+# Main execution
+arr = []
+n = int(input("Enter number of elements for the array: "))
+for i in range(n):
+    s = int(input("Enter number: "))
+    arr.append(s)
+
+start = time.time()
+det_quicksort(arr, 0, len(arr) - 1)
+end = time.time() - start
+
+print("Sorted array:", arr)
+print("Time taken:", end)
+print("Total swaps:", total_swaps)
+print("Total iterations:", total_iterations)
