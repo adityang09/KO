@@ -1,0 +1,41 @@
+from heapq import heappush,heappop
+class Node:
+    def __init__(self,char,freq,left=None,right=None):
+        self.char=char
+        self.freq=freq
+        self.left=left
+        self.right=right
+        self.huff=''
+    
+    def __lt__(self,other):
+        return self.freq<other.freq
+
+def printnode(node,val=''):
+    new_val=val+str(node.huff)
+    if(node.left):
+        printnode(node.left,new_val)
+    if(node.right):
+        printnode(node.right,new_val)
+    else:
+        print(f"{node.char}-->{new_val}")
+
+char=['a','b','c','d','e']
+freq=[10,20,54,3,5,23]
+nodes=[]
+
+for i in range(len(char)):
+    heappush(nodes,Node(char[i],freq[i]))
+while len(nodes)>1:
+    left=heappop(nodes)
+    right=heappop(nodes)
+    
+    left.huff='0'
+    right.huff='1'
+    
+    nn=Node(left.char+right.char,left.freq+right.freq,left,right)
+    heappush(nodes,nn)
+printnode(nodes[0])    
+    
+
+        
+        
