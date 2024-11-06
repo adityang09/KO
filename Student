@@ -1,0 +1,85 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentData {
+    struct Student {
+        string name;
+        uint256 age;
+        string class;
+        uint256 rollNumber;
+    }
+
+    Student[] public students;
+
+    event StudentAdded(string name, uint256 rollNumber);
+    event FallbackCalled(address sender, uint256 amount, string message);
+
+    function addStudent(string memory _name, uint256 _age, string memory _class, uint256 _rollNumber) public {
+        Student memory newStudent = Student({
+            name: _name,
+            age: _age,
+            class: _class,
+            rollNumber: _rollNumber
+        });
+        
+        students.push(newStudent);
+
+        emit StudentAdded(_name, _rollNumber);
+    }
+
+    function getTotalStudents() public view returns (uint256) {
+        return students.length;
+    }
+
+    function getStudent(uint256 index) public view returns (string memory, uint256, string memory, uint256) {
+        require(index < students.length, "Invalid index");
+        Student memory student = students[index];
+        return (student.name, student.age, student.class, student.rollNumber);
+    }
+
+    fallback() external payable {
+        emit FallbackCalled(msg.sender, msg.value, "Thank you for sending Ether!");
+    }
+
+    receive() external payable {
+        
+    }
+
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+}
+---------------------------------------------
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.22;
+
+contract StudentData {
+    struct Student {
+        string name;
+        int age;
+    }
+
+    Student[] public studentArray;
+    function addStudent(string memory name, int age) public {
+        for(uint i = 0; i<studentArray.length; i++) {
+            if (studentArray[i].age == age)
+            {
+                revert("Roll No Exists");
+            }
+        }
+        studentArray.push(Student(name, age));
+    }
+
+    function displayAllStudents() public view returns (Student[] memory) {
+        return studentArray;
+    }
+
+        function getStudentLength() public view returns (uint256) {
+        return studentArray.length;
+    }
+
+    function getStudent(uint128 index) public view returns (Student memory) {
+        require(studentArray.length > index, "Out of Index");
+        return studentArray[index];
+    }
+}
