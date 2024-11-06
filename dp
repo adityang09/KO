@@ -1,0 +1,18 @@
+dp=[]
+def knapsack(C,n,wt,val):
+    if n==0 or C==0:
+        return 0
+    if dp[n][C]!=-1:
+        return dp[n][C]
+    if wt[n-1]>C:
+        dp[n][C]=knapsack(C,n-1,wt,val)
+        return dp[n][C]
+    else:    
+        dp[n][C]=max(val[n-1]+knapsack(C-wt[n-1],n-1,wt,val),knapsack(C,n-1,wt,val))
+        return dp[n][C]
+wt=[1,5,4,2]
+val=[100,300,9,10]
+n=len(wt)
+C=10
+dp=[[-1 for i in range(C+1)] for i in range(n+1)]
+print(knapsack(C,len(wt),wt,val))
